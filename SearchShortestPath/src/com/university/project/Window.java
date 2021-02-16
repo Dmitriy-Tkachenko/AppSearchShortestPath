@@ -39,7 +39,7 @@ public class Window  {
     private List<String[]> rows;
     private BasicVisualizationServer<String, StringBuilder> vv;
     private JScrollPane scrollBar;
-    private boolean graphWithWeight;
+    private boolean graphWithWeight, pathFound;
 
     public Window(String title) {
         frame.setTitle(title);
@@ -143,6 +143,7 @@ public class Window  {
         scrollBar = new JScrollPane(jPanel);
 
         graphWithWeight = false;
+        pathFound = false;
         for (StringBuilder stringBuilder : graph.getEdges()) {
             if (!stringBuilder.toString().equals("")) {
                 graphWithWeight = true;
@@ -284,7 +285,16 @@ public class Window  {
                     break;
                 }
                 case "Сохранить": {
-                    saveGraph();
+                    if (graph == null) {
+                        JOptionPane.showMessageDialog(frame, "Файл не выбран!");
+                    } else if (!graphWithWeight) {
+                        JOptionPane.showMessageDialog(frame, "Выбран неориентированный граф!");
+                    } else if (!pathFound) {
+                        JOptionPane.showMessageDialog(frame, "Найдите кратчайший путь!");
+                    } else {
+                        saveGraph();
+                        JOptionPane.showMessageDialog(frame, "Сохранено!");
+                    }
                     break;
                 }
                 case "Поиск": {
@@ -299,6 +309,7 @@ public class Window  {
                                         double nanoTime = timeEnd - timeStart;
                                         double milliSecondTime = nanoTime / 1000000;
                                         jLabelAlgorithmRuntime.setText("Время выполнения алгоритма: " + milliSecondTime + " мс.");
+                                        pathFound = true;
                                         break;
                                     }
                                     case "Флойда": {
@@ -308,6 +319,7 @@ public class Window  {
                                         double nanoTime = timeEnd - timeStart;
                                         double milliSecondTime = nanoTime / 1000000;
                                         jLabelAlgorithmRuntime.setText("Время выполнения алгоритма: " + milliSecondTime + " мс.");
+                                        pathFound = true;
                                         break;
                                     }
                                     case "Форда-Беллмана": {
@@ -317,6 +329,7 @@ public class Window  {
                                         double nanoTime = timeEnd - timeStart;
                                         double milliSecondTime = nanoTime / 1000000;
                                         jLabelAlgorithmRuntime.setText("Время выполнения алгоритма: " + milliSecondTime + " мс.");
+                                        pathFound = true;
                                         break;
                                     }
                                 }
